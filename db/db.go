@@ -2,25 +2,22 @@ package db
 
 import (
 	"context"
-	"fmt"
-
-	"shop/ent"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
+
+	"shop/ent"
 )
 
-var Client *ent.Client
-var Err error
+func Connect() *ent.Client {
+	client, err := ent.Open("sqlite3", "file:shop.db?_fk=1")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-func Connect() {
-	Client, Err = ent.Open("sqlite3", "file:shop.db?_fk=1")
-	if Err != nil {
-		fmt.Println(Err)
+	if err := client.Schema.Create(context.Background()); err != nil {
+		log.Fatal(err)
 	}
-	Client.Schema.Create(context.Background())
-}
-func Close() {
-	if Client != nil {
-		Client.Close()
-	}
+
+	return client
 }

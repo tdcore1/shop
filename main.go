@@ -1,24 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
+	"shop/app"
 	"shop/db"
-	"shop/handlers"
 )
 
 func main() {
-	db.Connect()
-	defer db.Close()
-	http.HandleFunc("/product", handlers.HandlerProduct)
-	http.HandleFunc("/product/add", handlers.HandlerAdd)
-	http.HandleFunc("/user", handlers.HandlerUser)
-	http.HandleFunc("/walet", handlers.HandlerWalet)
-	http.HandleFunc("/login", handlers.LoginHandler)
-	http.HandleFunc("/product/select", handlers.CartHandler)
-	http.HandleFunc("/cart", handlers.ShowCart)
+	application := &app.App{
+		DB:  db.Connect(),
+		Key: []byte("eifbwrrpbep"),
+	}
 
-	fmt.Println("Server running on :8080")
+	http.HandleFunc("/login", application.LoginHandler)
+	http.HandleFunc("/product/add", application.AddProduct)
+	http.HandleFunc("/products", application.GetProducts)
+	http.HandleFunc("/walet", application.AddWalet)
+	http.HandleFunc("/product/select", application.SelectProduct)
+	http.HandleFunc("/cart", application.ShowCart)
+
 	http.ListenAndServe(":8080", nil)
 }
