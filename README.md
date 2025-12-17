@@ -1,4 +1,4 @@
-# Shop Backend 🏋️‍♂️
+# Shop Backend 
 
 Backend project built with **Go**,**SQLite**, and **Ent ORM**
 
